@@ -70,7 +70,7 @@ sudo apt install -y nodejs
 3. Clone the repository:
 
 ```bash
-git clone https://github.com/yourusername/n8n-workflow-analyzer.git
+git clone https://github.com/yoonsoo-park/n8n-workflow-analyzer.git
 cd n8n-workflow-analyzer
 ```
 
@@ -183,7 +183,7 @@ sudo apt install -y docker.io docker-compose
 2. Clone the repository:
 
 ```bash
-git clone https://github.com/yourusername/n8n-workflow-analyzer.git
+git clone https://github.com/yoonsoo-park/n8n-workflow-analyzer.git
 cd n8n-workflow-analyzer
 ```
 
@@ -192,7 +192,7 @@ cd n8n-workflow-analyzer
 1. Create a `docker-compose.yml` file:
 
 ```yaml
-version: '3'
+version: "3"
 
 services:
   api:
@@ -417,13 +417,13 @@ env_variables:
 ```yaml
 runtime: nodejs20
 handlers:
-- url: /
-  static_files: dist/index.html
-  upload: dist/index.html
+  - url: /
+    static_files: dist/index.html
+    upload: dist/index.html
 
-- url: /(.*)
-  static_files: dist/\1
-  upload: dist/(.*)
+  - url: /(.*)
+    static_files: dist/\1
+    upload: dist/(.*)
 ```
 
 3. Deploy the API server:
@@ -625,4 +625,3 @@ If you encounter issues not covered in this guide:
 1. **Check Documentation**: Refer to the technical documentation
 2. **Check Issue Tracker**: Check the GitHub issue tracker
 3. **Contact Support**: Contact the support team
-
