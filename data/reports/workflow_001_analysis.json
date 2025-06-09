@@ -1,0 +1,165 @@
+{
+  "workflow_id": "workflow_001",
+  "workflow_name": "Customer Data Processing",
+  "analysis_timestamp": "2025-06-08T19:55:36.324686",
+  "metrics": {
+    "structure": {
+      "node_count": 8,
+      "connection_count": 7,
+      "max_depth": 6,
+      "max_width": 2,
+      "branching_factor": 1.1666666666666667,
+      "convergence_factor": 0.0,
+      "cyclic": false,
+      "connected_components": 1,
+      "node_type_distribution": {
+        "n8n-nodes-base.start": 1,
+        "n8n-nodes-base.webhook": 1,
+        "n8n-nodes-base.json": 1,
+        "n8n-nodes-base.httpRequest": 1,
+        "n8n-nodes-base.if": 1,
+        "n8n-nodes-base.postgres": 1,
+        "n8n-nodes-base.emailSend": 1,
+        "n8n-nodes-base.function": 1
+      },
+      "unique_node_types": 8,
+      "avg_connections_per_node": 0.875,
+      "max_outgoing_connections": 2,
+      "max_incoming_connections": 1,
+      "has_error_handling": false,
+      "error_handling_coverage": 0.0
+    },
+    "complexity": {
+      "structural_complexity": 20.333333333333332,
+      "cognitive_complexity": 9,
+      "cyclomatic_complexity": 1,
+      "halstead_volume": 145.73942985382715,
+      "maintainability_index": 100.0,
+      "technical_debt_ratio": 0.30000000000000004,
+      "naming_consistency_score": 1.0,
+      "documentation_coverage": 0.0
+    },
+    "node_analysis": {
+      "total_nodes": 8,
+      "unique_types": 8,
+      "type_distribution": {
+        "n8n-nodes-base.start": 1,
+        "n8n-nodes-base.webhook": 1,
+        "n8n-nodes-base.json": 1,
+        "n8n-nodes-base.httpRequest": 1,
+        "n8n-nodes-base.if": 1,
+        "n8n-nodes-base.postgres": 1,
+        "n8n-nodes-base.emailSend": 1,
+        "n8n-nodes-base.function": 1
+      },
+      "type_percentages": {
+        "n8n-nodes-base.start": 12.5,
+        "n8n-nodes-base.webhook": 12.5,
+        "n8n-nodes-base.json": 12.5,
+        "n8n-nodes-base.httpRequest": 12.5,
+        "n8n-nodes-base.if": 12.5,
+        "n8n-nodes-base.postgres": 12.5,
+        "n8n-nodes-base.emailSend": 12.5,
+        "n8n-nodes-base.function": 12.5
+      },
+      "common_types": [
+        "n8n-nodes-base.start",
+        "n8n-nodes-base.webhook",
+        "n8n-nodes-base.json",
+        "n8n-nodes-base.httpRequest",
+        "n8n-nodes-base.if"
+      ],
+      "rare_types": [
+        "n8n-nodes-base.start",
+        "n8n-nodes-base.webhook",
+        "n8n-nodes-base.json",
+        "n8n-nodes-base.httpRequest",
+        "n8n-nodes-base.if",
+        "n8n-nodes-base.postgres",
+        "n8n-nodes-base.emailSend",
+        "n8n-nodes-base.function"
+      ],
+      "node_categories": {
+        "triggers": [
+          "start_node",
+          "webhook_node"
+        ],
+        "actions": [
+          "database_insert",
+          "email_notification"
+        ],
+        "transformations": [
+          "json_node",
+          "error_handler"
+        ],
+        "conditions": [
+          "if_node"
+        ],
+        "integrations": [
+          "http_request_node"
+        ],
+        "utilities": []
+      }
+    },
+    "connection_analysis": {
+      "total_connections": 7,
+      "connection_types": {
+        "main": 7
+      },
+      "flow_patterns": {
+        "linear_sequences": [
+          [
+            "start_node",
+            "webhook_node",
+            "json_node",
+            "http_request_node",
+            "if_node"
+          ],
+          [
+            "database_insert",
+            "email_notification"
+          ]
+        ],
+        "parallel_branches": [
+          {
+            "source": "if_node",
+            "branches": [
+              "database_insert",
+              "error_handler"
+            ],
+            "branch_count": 2
+          }
+        ],
+        "merge_points": [],
+        "loops": []
+      },
+      "bottlenecks": [],
+      "dead_ends": [
+        "email_notification",
+        "error_handler"
+      ],
+      "entry_points": [
+        "start_node"
+      ],
+      "exit_points": [
+        "email_notification",
+        "error_handler"
+      ]
+    },
+    "error_handling": {
+      "has_error_handling": false,
+      "error_handling_types": [],
+      "coverage_percentage": 0.0,
+      "nodes_with_error_handling": [],
+      "recommendations": [
+        "Consider adding error handling to more nodes",
+        "Consider using try-catch blocks in function nodes"
+      ]
+    }
+  },
+  "patterns": [],
+  "recommendations": [
+    "Add error handling mechanisms to improve workflow reliability",
+    "Add more documentation and notes to workflow nodes"
+  ]
+}

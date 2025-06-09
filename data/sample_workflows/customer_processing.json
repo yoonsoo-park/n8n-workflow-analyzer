@@ -1,0 +1,180 @@
+{
+  "id": "workflow_001",
+  "name": "Customer Data Processing",
+  "active": true,
+  "nodes": [
+    {
+      "id": "start_node",
+      "name": "Start",
+      "type": "n8n-nodes-base.start",
+      "position": [100, 100],
+      "parameters": {}
+    },
+    {
+      "id": "webhook_node",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "position": [300, 100],
+      "parameters": {
+        "path": "customer-data",
+        "httpMethod": "POST"
+      }
+    },
+    {
+      "id": "json_node",
+      "name": "Extract Customer Info",
+      "type": "n8n-nodes-base.json",
+      "position": [500, 100],
+      "parameters": {
+        "operation": "extract",
+        "path": "customer"
+      }
+    },
+    {
+      "id": "http_request_node",
+      "name": "Validate Customer",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [700, 100],
+      "parameters": {
+        "url": "https://api.validation.com/customer",
+        "method": "POST",
+        "sendBody": true,
+        "bodyContentType": "json"
+      }
+    },
+    {
+      "id": "if_node",
+      "name": "Check Validation",
+      "type": "n8n-nodes-base.if",
+      "position": [900, 100],
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{$json.valid}}",
+              "value2": true
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "database_insert",
+      "name": "Save to Database",
+      "type": "n8n-nodes-base.postgres",
+      "position": [1100, 50],
+      "parameters": {
+        "operation": "insert",
+        "table": "customers",
+        "columns": "name,email,phone"
+      }
+    },
+    {
+      "id": "email_notification",
+      "name": "Send Welcome Email",
+      "type": "n8n-nodes-base.emailSend",
+      "position": [1300, 50],
+      "parameters": {
+        "toEmail": "={{$json.email}}",
+        "subject": "Welcome!",
+        "text": "Thank you for joining us!"
+      }
+    },
+    {
+      "id": "error_handler",
+      "name": "Log Error",
+      "type": "n8n-nodes-base.function",
+      "position": [1100, 150],
+      "parameters": {
+        "functionCode": "console.log('Validation failed:', $input.all());\nreturn $input.all();"
+      }
+    }
+  ],
+  "connections": {
+    "start_node": {
+      "main": [
+        [
+          {
+            "node": "webhook_node",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "webhook_node": {
+      "main": [
+        [
+          {
+            "node": "json_node",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "json_node": {
+      "main": [
+        [
+          {
+            "node": "http_request_node",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "http_request_node": {
+      "main": [
+        [
+          {
+            "node": "if_node",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "if_node": {
+      "main": [
+        [
+          {
+            "node": "database_insert",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "error_handler",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "database_insert": {
+      "main": [
+        [
+          {
+            "node": "email_notification",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "timezone": "America/New_York",
+    "saveManualExecutions": true,
+    "saveExecutionProgress": false,
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "last",
+    "executionTimeout": 300
+  },
+  "tags": ["customer", "validation", "database"],
+  "createdAt": "2024-01-15T10:30:00Z",
+  "updatedAt": "2024-01-20T14:45:00Z"
+}
+

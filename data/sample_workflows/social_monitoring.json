@@ -1,0 +1,153 @@
+{
+  "id": "workflow_002",
+  "name": "Social Media Monitoring",
+  "active": true,
+  "nodes": [
+    {
+      "id": "cron_trigger",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.cron",
+      "position": [100, 100],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 */15 * * * *"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "twitter_search",
+      "name": "Search Twitter",
+      "type": "n8n-nodes-base.twitter",
+      "position": [300, 100],
+      "parameters": {
+        "operation": "search",
+        "searchText": "#mycompany OR @mycompany",
+        "returnAll": false,
+        "limit": 50
+      }
+    },
+    {
+      "id": "sentiment_analysis",
+      "name": "Analyze Sentiment",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [500, 100],
+      "parameters": {
+        "url": "https://api.sentiment.com/analyze",
+        "method": "POST",
+        "sendBody": true,
+        "bodyContentType": "json",
+        "jsonParameters": true,
+        "parametersJson": "={\"text\": \"{{$json.text}}\"}"
+      }
+    },
+    {
+      "id": "filter_negative",
+      "name": "Filter Negative Sentiment",
+      "type": "n8n-nodes-base.if",
+      "position": [700, 100],
+      "parameters": {
+        "conditions": {
+          "number": [
+            {
+              "value1": "={{$json.sentiment_score}}",
+              "operation": "smaller",
+              "value2": 0.3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "slack_alert",
+      "name": "Send Slack Alert",
+      "type": "n8n-nodes-base.slack",
+      "position": [900, 50],
+      "parameters": {
+        "operation": "postMessage",
+        "channel": "#social-monitoring",
+        "text": "Negative mention detected: {{$json.text}}"
+      }
+    },
+    {
+      "id": "database_log",
+      "name": "Log to Database",
+      "type": "n8n-nodes-base.postgres",
+      "position": [900, 150],
+      "parameters": {
+        "operation": "insert",
+        "table": "social_mentions",
+        "columns": "platform,text,sentiment_score,created_at"
+      }
+    }
+  ],
+  "connections": {
+    "cron_trigger": {
+      "main": [
+        [
+          {
+            "node": "twitter_search",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "twitter_search": {
+      "main": [
+        [
+          {
+            "node": "sentiment_analysis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "sentiment_analysis": {
+      "main": [
+        [
+          {
+            "node": "filter_negative",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "filter_negative": {
+      "main": [
+        [
+          {
+            "node": "slack_alert",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "database_log",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "timezone": "UTC",
+    "saveManualExecutions": false,
+    "saveExecutionProgress": true,
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "none",
+    "executionTimeout": 120
+  },
+  "tags": ["social-media", "monitoring", "sentiment"],
+  "createdAt": "2024-02-01T08:00:00Z",
+  "updatedAt": "2024-02-10T16:30:00Z"
+}
+

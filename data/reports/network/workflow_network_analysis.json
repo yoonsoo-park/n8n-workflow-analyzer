@@ -1,0 +1,310 @@
+[
+  {
+    "workflow_id": "workflow_001",
+    "workflow_name": "Customer Data Processing",
+    "graph_metrics": {
+      "node_count": 8,
+      "edge_count": 7,
+      "density": 0.125,
+      "clustering_coefficient": 0.0,
+      "connected_components": 1,
+      "strongly_connected_components": 8,
+      "diameter": 0,
+      "radius": 0,
+      "average_degree": 1.75,
+      "degree_distribution": {
+        "1": 3,
+        "2": 4,
+        "3": 1
+      },
+      "assortativity": NaN
+    },
+    "centralities": {
+      "start_node": {
+        "degree": 0.14285714285714285,
+        "betweenness": 0.0,
+        "closeness": 0.0,
+        "eigenvector": 0.0,
+        "pagerank": 0.048403007261574246
+      },
+      "webhook_node": {
+        "degree": 0.2857142857142857,
+        "betweenness": 0.14285714285714285,
+        "closeness": 0.0,
+        "eigenvector": 0.0,
+        "pagerank": 0.08954522716645007
+      },
+      "json_node": {
+        "degree": 0.2857142857142857,
+        "betweenness": 0.23809523809523808,
+        "closeness": 0.0,
+        "eigenvector": 0.0,
+        "pagerank": 0.12451602282833212
+      },
+      "http_request_node": {
+        "degree": 0.2857142857142857,
+        "betweenness": 0.2857142857142857,
+        "closeness": 0.0,
+        "eigenvector": 0.0,
+        "pagerank": 0.15424180217257633
+      },
+      "if_node": {
+        "degree": 0.42857142857142855,
+        "betweenness": 0.2857142857142857,
+        "closeness": 0.0,
+        "eigenvector": 0.0,
+        "pagerank": 0.1795096591757837
+      },
+      "database_insert": {
+        "degree": 0.2857142857142857,
+        "betweenness": 0.11904761904761904,
+        "closeness": 0.0,
+        "eigenvector": 0.0,
+        "pagerank": 0.12469525687118033
+      },
+      "email_notification": {
+        "degree": 0.14285714285714285,
+        "betweenness": 0.0,
+        "closeness": 0.0,
+        "eigenvector": 0.0,
+        "pagerank": 0.15439376765292284
+      },
+      "error_handler": {
+        "degree": 0.14285714285714285,
+        "betweenness": 0.0,
+        "closeness": 0.0,
+        "eigenvector": 0.0,
+        "pagerank": 0.12469525687118033
+      }
+    },
+    "path_analysis": {
+      "diameter": 6,
+      "average_path_length": 2.730769230769231,
+      "critical_paths": [
+        [
+          "start_node",
+          "webhook_node",
+          "json_node",
+          "http_request_node",
+          "if_node",
+          "database_insert",
+          "email_notification"
+        ],
+        [
+          "start_node",
+          "webhook_node",
+          "json_node",
+          "http_request_node",
+          "if_node",
+          "error_handler"
+        ]
+      ],
+      "bottlenecks": [
+        "http_request_node",
+        "if_node"
+      ]
+    }
+  },
+  {
+    "workflow_id": "workflow_002",
+    "workflow_name": "Social Media Monitoring",
+    "graph_metrics": {
+      "node_count": 6,
+      "edge_count": 5,
+      "density": 0.16666666666666666,
+      "clustering_coefficient": 0.0,
+      "connected_components": 1,
+      "strongly_connected_components": 6,
+      "diameter": 0,
+      "radius": 0,
+      "average_degree": 1.6666666666666667,
+      "degree_distribution": {
+        "1": 3,
+        "2": 2,
+        "3": 1
+      },
+      "assortativity": NaN
+    },
+    "centralities": {
+      "cron_trigger": {
+        "degree": 0.2,
+        "betweenness": 0.0,
+        "closeness": 0.0,
+        "eigenvector": 7.294491816748169e-11,
+        "pagerank": 0.07508733989309532
+      },
+      "twitter_search": {
+        "degree": 0.4,
+        "betweenness": 0.2,
+        "closeness": 0.0,
+        "eigenvector": 5.076966304456727e-08,
+        "pagerank": 0.1389122106128792
+      },
+      "sentiment_analysis": {
+        "degree": 0.4,
+        "betweenness": 0.30000000000000004,
+        "closeness": 0.0,
+        "eigenvector": 1.7642530852905296e-05,
+        "pagerank": 0.19316396747663533
+      },
+      "filter_negative": {
+        "degree": 0.6000000000000001,
+        "betweenness": 0.30000000000000004,
+        "closeness": 0.0,
+        "eigenvector": 0.004081339365710729,
+        "pagerank": 0.2392773606737756
+      },
+      "slack_alert": {
+        "degree": 0.2,
+        "betweenness": 0.0,
+        "closeness": 0.0,
+        "eigenvector": 0.7071008917961142,
+        "pagerank": 0.17677956067180708
+      },
+      "database_log": {
+        "degree": 0.2,
+        "betweenness": 0.0,
+        "closeness": 0.0,
+        "eigenvector": 0.7071008917961142,
+        "pagerank": 0.17677956067180708
+      }
+    },
+    "path_analysis": {
+      "diameter": 4,
+      "average_path_length": 2.142857142857143,
+      "critical_paths": [
+        [
+          "cron_trigger",
+          "twitter_search",
+          "sentiment_analysis",
+          "filter_negative",
+          "slack_alert"
+        ],
+        [
+          "cron_trigger",
+          "twitter_search",
+          "sentiment_analysis",
+          "filter_negative",
+          "database_log"
+        ]
+      ],
+      "bottlenecks": [
+        "sentiment_analysis",
+        "filter_negative"
+      ]
+    }
+  },
+  {
+    "workflow_id": "workflow_003",
+    "workflow_name": "E-commerce Order Processing",
+    "graph_metrics": {
+      "node_count": 9,
+      "edge_count": 8,
+      "density": 0.1111111111111111,
+      "clustering_coefficient": 0.0,
+      "connected_components": 1,
+      "strongly_connected_components": 9,
+      "diameter": 0,
+      "radius": 0,
+      "average_degree": 1.7777777777777777,
+      "degree_distribution": {
+        "1": 3,
+        "2": 5,
+        "3": 1
+      },
+      "assortativity": NaN
+    },
+    "centralities": {
+      "webhook_order": {
+        "degree": 0.125,
+        "betweenness": 0.0,
+        "closeness": 0.0,
+        "eigenvector": 0.0,
+        "pagerank": 0.04372316379213126
+      },
+      "validate_order": {
+        "degree": 0.25,
+        "betweenness": 0.125,
+        "closeness": 0.0,
+        "eigenvector": 0.0,
+        "pagerank": 0.08088815049268305
+      },
+      "check_inventory": {
+        "degree": 0.25,
+        "betweenness": 0.21428571428571427,
+        "closeness": 0.0,
+        "eigenvector": 0.0,
+        "pagerank": 0.11247886710782992
+      },
+      "inventory_check": {
+        "degree": 0.375,
+        "betweenness": 0.26785714285714285,
+        "closeness": 0.0,
+        "eigenvector": 0.0,
+        "pagerank": 0.1393308761148583
+      },
+      "process_payment": {
+        "degree": 0.25,
+        "betweenness": 0.14285714285714285,
+        "closeness": 0.0,
+        "eigenvector": 0.0,
+        "pagerank": 0.1029386893175315
+      },
+      "create_shipment": {
+        "degree": 0.25,
+        "betweenness": 0.08928571428571427,
+        "closeness": 0.0,
+        "eigenvector": 0.0,
+        "pagerank": 0.13122070182729964
+      },
+      "send_confirmation": {
+        "degree": 0.125,
+        "betweenness": 0.0,
+        "closeness": 0.0,
+        "eigenvector": 0.0,
+        "pagerank": 0.15526016020283515
+      },
+      "backorder_notification": {
+        "degree": 0.25,
+        "betweenness": 0.07142857142857142,
+        "closeness": 0.0,
+        "eigenvector": 0.0,
+        "pagerank": 0.1029386893175315
+      },
+      "update_crm": {
+        "degree": 0.125,
+        "betweenness": 0.0,
+        "closeness": 0.0,
+        "eigenvector": 0.0,
+        "pagerank": 0.13122070182729964
+      }
+    },
+    "path_analysis": {
+      "diameter": 6,
+      "average_path_length": 2.7,
+      "critical_paths": [
+        [
+          "webhook_order",
+          "validate_order",
+          "check_inventory",
+          "inventory_check",
+          "process_payment",
+          "create_shipment",
+          "send_confirmation"
+        ],
+        [
+          "webhook_order",
+          "validate_order",
+          "check_inventory",
+          "inventory_check",
+          "backorder_notification",
+          "update_crm"
+        ]
+      ],
+      "bottlenecks": [
+        "check_inventory",
+        "inventory_check"
+      ]
+    }
+  }
+]

@@ -1,0 +1,210 @@
+{
+  "id": "workflow_003",
+  "name": "E-commerce Order Processing",
+  "active": true,
+  "nodes": [
+    {
+      "id": "webhook_order",
+      "name": "Order Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "position": [100, 100],
+      "parameters": {
+        "path": "new-order",
+        "httpMethod": "POST"
+      }
+    },
+    {
+      "id": "validate_order",
+      "name": "Validate Order Data",
+      "type": "n8n-nodes-base.function",
+      "position": [300, 100],
+      "parameters": {
+        "functionCode": "const order = $input.first().json;\nif (!order.customer_id || !order.items || order.items.length === 0) {\n  throw new Error('Invalid order data');\n}\nreturn [{json: order}];"
+      }
+    },
+    {
+      "id": "check_inventory",
+      "name": "Check Inventory",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [500, 100],
+      "parameters": {
+        "url": "https://api.inventory.com/check",
+        "method": "POST",
+        "sendBody": true,
+        "bodyContentType": "json"
+      }
+    },
+    {
+      "id": "inventory_check",
+      "name": "Inventory Available?",
+      "type": "n8n-nodes-base.if",
+      "position": [700, 100],
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{$json.available}}",
+              "value2": true
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "process_payment",
+      "name": "Process Payment",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [900, 50],
+      "parameters": {
+        "url": "https://api.payments.com/charge",
+        "method": "POST",
+        "sendBody": true,
+        "bodyContentType": "json"
+      }
+    },
+    {
+      "id": "create_shipment",
+      "name": "Create Shipment",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [1100, 50],
+      "parameters": {
+        "url": "https://api.shipping.com/create",
+        "method": "POST",
+        "sendBody": true,
+        "bodyContentType": "json"
+      }
+    },
+    {
+      "id": "send_confirmation",
+      "name": "Send Order Confirmation",
+      "type": "n8n-nodes-base.emailSend",
+      "position": [1300, 50],
+      "parameters": {
+        "toEmail": "={{$json.customer_email}}",
+        "subject": "Order Confirmation #{{$json.order_id}}",
+        "text": "Your order has been confirmed and will be shipped soon."
+      }
+    },
+    {
+      "id": "backorder_notification",
+      "name": "Notify Backorder",
+      "type": "n8n-nodes-base.emailSend",
+      "position": [900, 150],
+      "parameters": {
+        "toEmail": "={{$json.customer_email}}",
+        "subject": "Order Backordered #{{$json.order_id}}",
+        "text": "Some items in your order are currently out of stock."
+      }
+    },
+    {
+      "id": "update_crm",
+      "name": "Update CRM",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [1100, 150],
+      "parameters": {
+        "url": "https://api.crm.com/customers/{{$json.customer_id}}/orders",
+        "method": "POST",
+        "sendBody": true,
+        "bodyContentType": "json"
+      }
+    }
+  ],
+  "connections": {
+    "webhook_order": {
+      "main": [
+        [
+          {
+            "node": "validate_order",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "validate_order": {
+      "main": [
+        [
+          {
+            "node": "check_inventory",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "check_inventory": {
+      "main": [
+        [
+          {
+            "node": "inventory_check",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "inventory_check": {
+      "main": [
+        [
+          {
+            "node": "process_payment",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "backorder_notification",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "process_payment": {
+      "main": [
+        [
+          {
+            "node": "create_shipment",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "create_shipment": {
+      "main": [
+        [
+          {
+            "node": "send_confirmation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "backorder_notification": {
+      "main": [
+        [
+          {
+            "node": "update_crm",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "timezone": "America/Los_Angeles",
+    "saveManualExecutions": true,
+    "saveExecutionProgress": true,
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "all",
+    "executionTimeout": 600
+  },
+  "tags": ["ecommerce", "orders", "payment", "shipping"],
+  "createdAt": "2024-01-10T12:00:00Z",
+  "updatedAt": "2024-03-01T09:15:00Z"
+}
+
